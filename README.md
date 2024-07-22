@@ -89,3 +89,60 @@ This script uses the functions from `deploy_app.py` to automate the entire proce
     python3 test_app_integration.py
     ```
     ![Test Execution](image.png)
+
+___
+# System Health Monitoring Script
+
+This script monitors the health of a Linux system by checking CPU usage, memory usage, disk space, and running processes. If any of these metrics exceed predefined thresholds, the script sends an alert to the console and logs the details into a log file.
+
+## Features
+
+- **CPU Usage Monitoring**: Checks the CPU usage percentage and alerts if it exceeds the threshold.
+- **Memory Usage Monitoring**: Checks the memory usage percentage and alerts if it exceeds the threshold.
+- **Disk Space Usage Monitoring**: Checks the disk space usage percentage and alerts if it exceeds the threshold.
+- **Running Processes Monitoring**: Lists the top CPU-consuming processes.
+
+## Prerequisites
+
+- Python 3.x
+- `psutil` library
+
+## Installation
+
+1. Install Python 3.x if it's not already installed.
+2. Install the required `psutil` library using pip:
+
+    ```bash
+    pip install psutil
+    ```
+
+## Usage
+
+1. **Run the Script**: Execute the script using Python 3.
+
+    ```bash
+    python3 system_health_monitor.py
+    ```
+    ![Test Execution](system_health_monitor.png)
+
+2. **Review the Log File**: Check the `system_health.log` file for any warnings or information about system health.
+
+## Script Details
+
+### system_health_monitor.py
+
+This script contains functions to monitor system health and log alerts if any metrics exceed predefined thresholds.
+
+#### Functions:
+
+- `check_cpu_usage()`: Checks CPU usage and logs a warning if it exceeds the threshold.
+- `check_memory_usage()`: Checks memory usage and logs a warning if it exceeds the threshold.
+- `check_disk_space_usage()`: Checks disk space usage and logs a warning if it exceeds the threshold.
+- `check_running_processes()`: Lists top CPU-consuming processes.
+- `monitor_system()`: Orchestrates the health checks.
+
+#### Logging
+
+The script logs warnings to `system_health.log` and prints alerts to the console.
+
+**Note**: The script runs indefinitely. To stop it, use `Ctrl + C` in the terminal.
