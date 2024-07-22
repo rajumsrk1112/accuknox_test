@@ -10,6 +10,7 @@ def clone_git_repo(url):
     """
     Function to clone the git repository to the current working directory
     """
+    print(f"Cloning github repo: {url}")
     git.Git().clone(url)
 
 def deploy_app(namespace):
@@ -31,8 +32,8 @@ def deploy_app(namespace):
     }
 
     # Create namespace
+    print(f"Creating namspace: {namespace}")
     ns_v1.create_namespace(body=namespace_body)
-    print(os.getcwd())
     deploy_path=f"{os.getcwd()}/qa-test/Deployment"
     for filename in os.listdir(deploy_path):
         print(f"Filename: {filename}")
@@ -40,13 +41,15 @@ def deploy_app(namespace):
             try:
                 documents = yaml.safe_load_all(stream)
                 for doc in documents:
-                    print(f"Doc: {doc}")
+                    print(f"Deployment file: {doc}")
                     kind = doc.get('kind')
                     # Create deployment in given namespace
                     if kind=="Deployment":
+                        print(f"creating deployment {filename} in namespace {namespace}")
                         apps_v1.create_namespaced_deployment(namespace,body=doc)
                     # Create Service in given namespace
                     elif kind=="Service":
+                        print(f"Creating service of {filename} in namespace {namespace}")
                         core_v1.create_namespaced_service(namespace,body=doc)
             except yaml.YAMLError as exc:
                 print(exc)
@@ -57,7 +60,7 @@ def deploy_app(namespace):
 
 def wait_for_pods_to_be_running(namespace_name, timeout=300, interval=10):
     """
-    Wait for all Pods in the namespace to be in the Running state.
+    Wait for all Pods in the namespace to be in Running state.
     """
     core_v1 = client.CoreV1Api()
     end_time = time.time() + timeout

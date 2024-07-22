@@ -1,0 +1,91 @@
+# QA Test Deployment and Integration Testing
+
+This repository contains scripts to deploy a frontend and backend application on a Kubernetes cluster and perform integration testing.
+
+## Prerequisites
+
+- Python 3.12
+- Git
+- Kubernetes cluster configured
+- `kubectl` configured to interact with your Kubernetes cluster
+- `pip` to install required Python packages
+
+## Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/Vengatesh-m/qa-test
+    cd qa-test
+    ```
+
+2. Install the required Python packages:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Deployment and Testing
+
+### Step 1: Clone the Git Repository
+
+The repository containing the deployment files needs to be cloned first.
+
+### Step 2: Deploy the Application
+
+Deploy the frontend and backend services in a specified namespace on the Kubernetes cluster.
+
+### Step 3: Port Forwarding
+
+Since the Kind cluster’s load balancer can’t be accessed directly from localhost, we port-forward the frontend service to localhost.
+
+### Step 4: Integration Testing
+
+Run integration tests to verify that the frontend correctly interacts with the backend.
+
+### Step 5: Cleanup
+
+Cleanup the namespace and the cloned repository after the tests.
+
+## Script Details
+
+### deploy_app.py
+
+This script contains functions for deploying the application on Kubernetes, port forwarding, and cleanup.
+
+#### Functions:
+
+- `clone_git_repo(url)`: Clone the Git repository to the current working directory.
+- `deploy_app(namespace)`: Deploy frontend and backend deployments in the given namespace.
+- `wait_for_pods_to_be_running(namespace_name, timeout=300, interval=10)`: Wait for all Pods in the namespace to be in the Running state.
+- `port_forward(service_name, namespace_name, local_port, remote_port)`: Port forward the specified service.
+- `cleanup_namespace(namespace)`: Delete the created namespace.
+- `cleanup_repo(directory)`: Delete the cloned repository directory.
+
+### test_app_integration.py
+
+This script uses the functions from `deploy_app.py` to automate the entire process of deployment, port forwarding, testing, and cleanup.
+
+#### Variables:
+
+- `REPO_URL`: URL of the Git repository containing the deployment files.
+- `SERVICE_NAME`: Name of the frontend service.
+- `NAMESPACE_NAME`: Namespace to deploy the application.
+- `LOCAL_PORT`: Local port for port forwarding.
+- `REMOTE_PORT`: Remote port of the service.
+- `FRONTEND_URL`: URL of the frontend service after port forwarding.
+- `EXPCTED_RESPONSE`: Expected response from the backend.
+
+#### Functions:
+
+- `test_integration(frontend_url)`: Test the integration between frontend and backend services.
+- `main()`: Main function to orchestrate the entire process.
+
+## Running the Tests
+
+1. Run the integration test script:
+
+    ```bash
+    python3 test_app_integration.py
+    ```
+    ![Test Execution](image.png)

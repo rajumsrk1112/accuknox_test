@@ -12,7 +12,6 @@ EXPCTED_RESPONSE="Hello from the Backend!"
 def test_integration(frontend_url):
     """
     Test the integration between frontend and backend services.
-    
     Args:
         frontend_url (str): The URL of the frontend service.
     """
@@ -20,10 +19,8 @@ def test_integration(frontend_url):
         response = requests.get(frontend_url)
         response.raise_for_status()
         print(f"HTTP Status code: {response.status_code}")
-        print(f"TYpe: {type(response.status_code)}")
         assert(response.status_code==200)
-        print(f"Response from frontend service: {response.text}")
-        # Assuming the backend message is included in the response text
+        print(f"Response from frontend service: {response.text}") 
         if EXPCTED_RESPONSE in response.text:
             print("Integration test passed: Frontend displays message from backend")
         else:
@@ -33,8 +30,11 @@ def test_integration(frontend_url):
 
 
 def main():
+    # Clone github repo which contains the deployment files
     clone_git_repo(url=REPO_URL)
+    # Deploy the app in accuknox namespace & wait for the pods to be up and running
     deploy_app(namespace=NAMESPACE_NAME)
+    # From kind cluser, loadBalancer cant be accessed from localhost so we are port-forwarding to port 8080 of localhost
     port_forward_process = port_forward(
         service_name=SERVICE_NAME,
         namespace_name=NAMESPACE_NAME,
@@ -49,7 +49,7 @@ def main():
         port_forward_process.terminate()
         port_forward_process.wait() 
     
-    # Cleanup the namespace
+    # Cleanup the namespace & cloned-repo
     cleanup_namespace(namespace=NAMESPACE_NAME)
     cleanup_repo(directory="qa-test")
 
