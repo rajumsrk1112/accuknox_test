@@ -1,29 +1,16 @@
-# QA Test Deployment and Integration Testing
+# Test Deployment and Integration Testing
 
 This repository contains scripts to deploy a frontend and backend application on a Kubernetes cluster and perform integration testing.
 
 ## Prerequisites
 
-- Python 3.12
+- Python 3.x
 - Git
 - Kubernetes cluster configured
 - `kubectl` configured to interact with your Kubernetes cluster
 - `pip` to install required Python packages
 
-## Installation
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/Vengatesh-m/qa-test
-    cd qa-test
-    ```
-
-2. Install the required Python packages:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
+**Note**: Git cloning, application deployment & integration test all are taken care with python scripting so that no manual intervention is required.
 
 ## Deployment and Testing
 
@@ -49,7 +36,7 @@ Cleanup the namespace and the cloned repository after the tests.
 
 ## Script Details
 
-### deploy_app.py
+[deploy_app.py](./test_1/deploy_app.py)
 
 This script contains functions for deploying the application on Kubernetes, port forwarding, and cleanup.
 
@@ -88,7 +75,7 @@ This script uses the functions from `deploy_app.py` to automate the entire proce
     ```bash
     python3 test_app_integration.py
     ```
-    ![Test Execution](image.png)
+    ![Test Execution](application_deploy.png)
 
 ___
 # System Health Monitoring Script
@@ -107,18 +94,9 @@ This script monitors the health of a Linux system by checking CPU usage, memory 
 - Python 3.x
 - `psutil` library
 
-## Installation
-
-1. Install Python 3.x if it's not already installed.
-2. Install the required `psutil` library using pip:
-
-    ```bash
-    pip install psutil
-    ```
-
 ## Usage
 
-1. **Run the Script**: Execute the script using Python 3.
+1. **Run the Script**: Execute the script using Python.
 
     ```bash
     python3 system_health_monitor.py
@@ -129,7 +107,7 @@ This script monitors the health of a Linux system by checking CPU usage, memory 
 
 ## Script Details
 
-### system_health_monitor.py
+[system_health_monitor.py](./test_2/system_health_monitor.py)
 
 This script contains functions to monitor system health and log alerts if any metrics exceed predefined thresholds.
 
@@ -146,3 +124,52 @@ This script contains functions to monitor system health and log alerts if any me
 The script logs warnings to `system_health.log` and prints alerts to the console.
 
 **Note**: The script runs indefinitely. To stop it, use `Ctrl + C` in the terminal.
+
+___
+
+# Application Health Checker
+
+This script checks the uptime of an application by verifying its HTTP status codes. It determines if the application is 'up' and functioning correctly or 'down' and not responding.
+
+## Features
+
+- **Uptime Monitoring**: Checks the application's status by sending an HTTP GET request to the specified endpoint.
+- **Failure Detection**: Detects if the application is down after a number of consecutive failures.
+
+## Prerequisites
+
+- Python 3.x
+- `requests` library
+
+## Usage
+
+1. **Run the Script**: Execute the script using Python 3.
+
+    ```sh
+    python3 application_health_checker.py
+    ```
+
+## Script Details
+
+[application_health_checker.py](./test_2/application_health_checker.py)
+
+This script contains functions to check the health of an application by sending HTTP GET requests to the specified endpoint and determining if the application is up or down based on the HTTP status codes.
+
+#### Functions:
+
+- `check_health(endpoint)`: Sends an HTTP GET request to the specified endpoint and checks the application's health based on the HTTP status code. Increments the failure count if the status code is not 200. Logs and prints if the application is down after consecutive failures.
+    - **Arguments**: `endpoint (str)`: The URL of the application's health endpoint.
+    - **Raises**: `requests.RequestException`: If there is an issue with the HTTP request.
+
+#### Main Loop
+
+The main loop continuously monitors the application's health at the specified time interval.
+
+**Note**: The script runs indefinitely. To stop it, use `Ctrl + C` in the terminal.
+
+**Example:**
+
+```sh
+python3 application_health_checker.py
+```
+![Test Execution](application_health_checker.png)
